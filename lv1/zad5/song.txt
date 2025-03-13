@@ -1,0 +1,3 @@
+Rječnik je tip podataka u Pythonu gdje su podaci pohranjeni u obliku parova ključ-vrijednost (engl. key-value). Definira
+se pomoću vitičastih zagrada. Pristupanje vrijednostima izvršava se specificiranjem ključa kako je prikazano u primjeru
+1.10.
