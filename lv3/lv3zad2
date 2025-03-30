@@ -1,0 +1,38 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+plt.ioff()
+
+mtcars = pd.read_csv('mtcars.csv')
+
+mpg_means = mtcars.groupby('cyl')['mpg'].mean() #grupira podatke po br cilinara
+plt.figure(figsize=(8, 4))
+plt.bar(mpg_means.index, mpg_means, color=['blue', 'green', 'red'])
+plt.xlabel('Broj cilindara')
+plt.ylabel('Prosječna potrošnja (mpg)')
+plt.title('Prosječna potrošnja automobila po broju cilindara')
+plt.show()
+
+plt.figure(figsize=(8, 4))
+mtcars.boxplot(column='wt', by='cyl', grid=False)
+plt.xlabel('Broj cilindara')
+plt.ylabel('Težina (1000 lbs)')
+plt.title('Distribucija težine automobila')
+plt.show()
+
+plt.figure(figsize=(8, 4))
+mtcars.boxplot(column='mpg', by='am', grid=False)
+plt.xlabel('Mjenjač (0 = Automatski, 1 = Ručni)')
+plt.ylabel('Potrošnja (mpg)')
+plt.title('Potrošnja automobila po tipu mjenjača')
+plt.show()
+
+plt.figure(figsize=(8, 5))
+colors = ['red' if am == 0 else 'blue' for am in mtcars['am']]
+plt.scatter(mtcars['hp'], mtcars['qsec'], c=colors)
+plt.xlabel('Snaga (hp)')
+plt.ylabel('Ubrzanje (qsec)')
+plt.title('Odnos ubrzanja i snage za ručni i automatski mjenjač')
+plt.legend(['Automatski', 'Ručni'], loc='upper right')
+plt.show()
