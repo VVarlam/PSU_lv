@@ -36,6 +36,8 @@ plt.figure(1)
 plt.plot(xtest[:,1],ytest_p,'og',label='predicted')
 plt.plot(xtest[:,1],ytest,'or',label='test')
 plt.legend(loc = 4)
+plt.show()
+
 #pozadinska funkcija vs model
 plt.figure(2)
 plt.plot(x,y_true,label='f')
@@ -44,3 +46,4 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.plot(xtrain[:,1],ytrain,'ok',label='train')
 plt.legend(loc = 4)
+plt.show()
