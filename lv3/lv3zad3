@@ -1,0 +1,29 @@
+import urllib.request
+import pandas as pd
+import matplotlib.pyplot as plt
+
+url = 'http://iszz.azo.hr/iskzl/rs/podatak/export/xml?postaja=160&polutant=5&tipPodatka=0&vrijemeOd=01.01.2017&vrijemeDo=31.12.2017'
+
+kvaliteta_zraka = urllib.request.urlopen(url).read()
+df = pd.read_xml(kvaliteta_zraka)
+
+df = df[['vrijednost', 'vrijeme']]
+df.columns = ['mjerenje', 'vrijeme']
+df['mjerenje'] = df['mjerenje'].astype(float)
+df['vrijeme'] = pd.to_datetime(df['vrijeme'], utc=True)
+
+tri_najvece_koncentracije = df.nlargest(3, 'mjerenje')
+
+print("Tri datuma s najvecom koncentracijom PM10 u 2017. godini:")
+print(tri_najvece_koncentracije[['vrijeme', 'mjerenje']])
+
+# Crtanje grafa
+plt.figure(figsize=(10, 5))
+plt.plot(df['vrijeme'], df['mjerenje'], label="PM10 (µg/m³)")
+plt.title('PM10 koncentracija u Osijeku (2017.)')
+plt.xlabel('Datum')
+plt.ylabel('PM10 (µg/m³)')
+plt.xticks(rotation = 45)
+plt.legend()
+plt.grid()
+plt.show()
