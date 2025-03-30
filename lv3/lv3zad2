@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-plt.ioff()
-
 mtcars = pd.read_csv('mtcars.csv')
 
 mpg_means = mtcars.groupby('cyl')['mpg'].mean() #grupira podatke po br cilinara
