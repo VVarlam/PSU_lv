@@ -1,0 +1,28 @@
+import numpy as np
+import pandas as pd
+
+mtcars = pd.read_csv('mtcars.csv')
+
+najveca_potrosnja5 = mtcars.sort_values(by = 'mpg').head(5)
+print(najveca_potrosnja5)
+
+auti_8cly = mtcars[mtcars['cyl'] == 8]
+najmanja_potrosnja3 = auti_8cly.sort_values(by='mpg').head(3)
+print(najmanja_potrosnja3)
+
+auti_6cyl = mtcars[mtcars['cyl'] == 6]
+srednja_potrosnja = auti_6cyl['mpg'].mean()
+
+auti_cyl4_wt = mtcars[(mtcars['cyl'] == 4) & (mtcars['wt'] >= 2.0) & (mtcars['wt'] <= 2.2)]
+srednja_potrosnja2 = auti_cyl4_wt['mpg'].mean()
+print(srednja_potrosnja2)
+
+mjenjac = mtcars['am'].value_counts()
+print("0 znaci da je automatsko, a 1 rucno")
+print(mjenjac)
+
+auti_hp_preko100 = mtcars[(mtcars['am'] == 0) & (mtcars['hp'] > 100)].shape[0]
+print (auti_hp_preko100)
+
+mtcars['masa_kg'] = mtcars['wt'] * 1000 * 0.453592
+print(mtcars[['masa_kg']])
