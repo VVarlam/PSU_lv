@@ -1,0 +1,22 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def ploca(velicina_kvadrata, redovi, stupci):
+    crno = np.zeros((velicina_kvadrata, velicina_kvadrata), dtype=np.uint8)
+    bijelo = np.ones((velicina_kvadrata, velicina_kvadrata), dtype=np.uint8) * 255
+
+    red1 = np.hstack([crno, bijelo] * (stupci // 2))
+    red2 = np.hstack([bijelo, crno] * (stupci // 2))
+
+    ploca = np.vstack([red1, red2] * (stupci // 2))
+
+    return ploca
+
+velicina_kvadrata = 100
+redovi, stupci = 6, 6
+
+img = ploca(velicina_kvadrata, redovi, stupci)
+
+plt.imshow(img, cmap='gray', vmin=0, vmax=255)
+
+plt.show()
