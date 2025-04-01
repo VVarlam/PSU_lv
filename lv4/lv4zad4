@@ -1,0 +1,41 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Učitavanje očišćenih podataka
+df = pd.read_csv('cars_processed.csv')
+print(df.info())
+
+# Sortiranje po cijeni i prikaz automobila s najnižom i najvišom cijenom
+cf = df.sort_values("selling_price")
+print(cf.iloc[[0, -1]])
+
+# Broj automobila proizvedenih 2012. godine
+print("Broj automobila iz 2012:", (df["year"] == 2012).sum())
+
+# Izračun prosječne kilometraže za diesel i benzinske automobile
+avg_km = df.groupby("fuel")["km_driven"].mean()
+print("Prosječna kilometraža (Petrol):", avg_km.get("Petrol", 0))
+print("Prosječna kilometraža (Diesel):", avg_km.get("Diesel", 0))
+
+# Različiti prikazi
+sns.pairplot(df, hue='fuel')
+sns.relplot(data=df, x='km_driven', y='selling_price', hue='fuel')
+
+# Uklanjanje nepotrebnih kolona
+df = df.drop(['name', 'mileage'], axis=1)
+
+# Prikaz distribucije kategorijskih varijabli
+obj_cols = df.select_dtypes(include=['object']).columns.tolist()
+fig, axes = plt.subplots(1, len(obj_cols), figsize=(15, 5))
+for col, ax in zip(obj_cols, axes):
+    sns.countplot(x=df[col], ax=ax)
+
+# Boxplot cijena po gorivu
+df.boxplot(by='fuel', column=['selling_price'], grid=False)
+
+# Histogram cijena
+df['selling_price'].hist(grid=False)
+
+plt.show()
