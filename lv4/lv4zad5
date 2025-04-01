@@ -36,7 +36,6 @@ print("RMSE test:", np.sqrt(mean_squared_error(y_test, y_pred_test)))
 print("Max error test:", max_error(y_test, y_pred_test))
 print("MAE test:", mean_absolute_error(y_test, y_pred_test))
 
-# Vizualizacija rezultata
 fig = plt.figure(figsize=[13, 10])
 ax = sns.regplot(x=y_pred_test, y=y_test, line_kws={'color': 'green'})
 ax.set(xlabel='Predikcija', ylabel='Stvarna vrijednost', title='Rezultati na testnim podacima')
