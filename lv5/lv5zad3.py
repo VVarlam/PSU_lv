@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 podaci = pd.read_csv('occupancy_processed.csv')
 
-X = podaci.loc[:, ['S3_Temp', 'S5_CO2']].to_numpy()  # ostavljeno točno ovako
+X = podaci.loc[:, ['S3_Temp', 'S5_CO2']].to_numpy()  
 y = podaci['Room_Occupancy_Count'].to_numpy()
 
 x_train, x_test, y_train, y_test = train_test_split(
@@ -16,7 +16,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 )
 
 skal = StandardScaler()
-x_train = skal.fit_transform(x_train)  # koristim novu varijablu za skalirano
+x_train = skal.fit_transform(x_train)  
 x_test = skal.transform(x_test)
 
 model = DecisionTreeClassifier(random_state=42)
