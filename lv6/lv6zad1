@@ -1,0 +1,56 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn import datasets
+
+def generate_data(n_samples, flagc):
+    if flagc == 1:
+        random_state = 365
+        X, y = datasets.make_blobs(n_samples=n_samples, random_state=random_state)
+    elif flagc == 2:
+        random_state = 148
+        X, y = datasets.make_blobs(n_samples=n_samples, random_state=random_state)
+        transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+        X = np.dot(X, transformation)
+    elif flagc == 3:
+        random_state = 148
+        X, y = datasets.make_blobs(n_samples=n_samples,
+                                   centers=4,
+                                   cluster_std=[1.0, 2.5, 0.5, 3.0],
+                                   random_state=random_state)
+    elif flagc == 4:
+        X, y = datasets.make_circles(n_samples=n_samples, factor=0.5, noise=0.05)
+    elif flagc == 5:
+        X, y = datasets.make_moons(n_samples=n_samples, noise=0.05)
+    else:
+        X = []
+    return X, y
+
+broj_uzoraka = 500
+nacin_generiranja = 5 
+
+
+podaci = generate_data(broj_uzoraka, nacin_generiranja)
+
+plt.figure(figsize=(6, 5))
+plt.scatter(podaci[:, 0], podaci[:, 1], s=15, color='gray')
+plt.title("Ulazni podaci")
+plt.xlabel("X1")
+plt.ylabel("X2")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+kmeans_model = KMeans(n_clusters=3, n_init=10, random_state=42)
+oznake = kmeans_model.fit_predict(podaci)
+
+plt.figure(figsize=(6, 5))
+plt.scatter(podaci[:, 0], podaci[:, 1], c=oznake, s=15, cmap='plasma')
+plt.scatter(kmeans_model.cluster_centers_[:, 0], kmeans_model.cluster_centers_[:, 1],
+            s=180, c='white', edgecolors='black', marker='X')
+plt.title("Rezultat KMeans algoritma")
+plt.xlabel("X1")
+plt.ylabel("X2")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
