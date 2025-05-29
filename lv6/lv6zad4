@@ -1,0 +1,31 @@
+from sklearn import cluster
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+image = mpimg.imread('example_grayscale.png')
+if image.ndim == 3:
+    image = np.mean(image, axis=2)
+
+pixels = image.reshape(-1, 1)
+
+#kvantizacija
+k = 10
+kmeans = cluster.KMeans(n_clusters=k, n_init=10)
+kmeans.fit(pixels)
+
+#zamjena piksela vrijednostima iz centara klastera
+centers = kmeans.cluster_centers_.squeeze()
+labels = kmeans.labels_
+compressed = np.choose(labels, centers).reshape(image.shape)
+
+plt.figure()
+plt.imshow(image, cmap='gray')
+plt.title('Originalna slika')
+plt.axis('off')
+
+plt.figure()
+plt.imshow(compressed, cmap='gray')
+plt.title(f'Kvantizirana slika (k = {k})')
+plt.axis('off')
+plt.show()
