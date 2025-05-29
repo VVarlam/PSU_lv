@@ -8,29 +8,23 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error, max_error
 
-# Učitavanje podataka
 df = pd.read_csv('cars_processed.csv')
 print(df.info())
 
-# One-hot kodiranje kategoričkih varijabli
 df = pd.get_dummies(df, columns=['fuel', 'seller_type', 'transmission', 'owner'], drop_first=True)
 
 X = df.drop(columns=['name', 'selling_price', 'seats'])
 y = df['selling_price']
 
-# Podjela na train i test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=300)
 
-# Skaliranje ulaznih veličina
 scaler = StandardScaler()
 X_train_s = scaler.fit_transform(X_train)
 X_test_s = scaler.transform(X_test)
 
-# Izrada modela
 linear_model = LinearRegression()
 linear_model.fit(X_train_s, y_train)
 
-# Evaluacija modela
 y_pred_train = linear_model.predict(X_train_s)
 y_pred_test = linear_model.predict(X_test_s)
 
