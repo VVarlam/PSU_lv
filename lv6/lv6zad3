@@ -20,12 +20,10 @@ def generate_data(n_samples, flagc):
         X, y = [], []
     return X
 
-# Generiranje podataka
 broj_uzoraka = 500
 nacin_generiranja = 5
 podaci = generate_data(broj_uzoraka, nacin_generiranja)
 
-# Hijerarhijsko grupiranje i prikaz
 Z = linkage(podaci, method='ward')
 
 plt.figure(figsize=(9, 6))
