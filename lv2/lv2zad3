@@ -4,18 +4,18 @@ import matplotlib.pyplot as plt
 image = plt.imread("tiger.png")
 
 svjetlina = np.clip(image * 1.5, 0, 1)
-rotacija = np.rot90(image, k=-1) #rotacija za 90 u smjeru kazaljke
+rotacija = np.rot90(image, k=-1) 
 zrcalo = np.fliplr(image)
 
 factor = 10
 rezolucija = image[::factor, ::factor]
 
 
-crno = np.zeros_like(image) #Stvara novu matricu iste velicine kao image, ali ispunjenu nulama (potpuno crnu)
-h, w, _ = image.shape #dohvaca dimenzije slike, - je broj kanala (koristi se zbog pretpostavljanja RGB slike, 3 kanala)
-crno[:, w//4:w//2] = image[:, w//4:w//2] #uzima dio slike od ¼ sirine do ½ visine
+crno = np.zeros_like(image)
+h, w, _ = image.shape 
+crno[:, w//4:w//2] = image[:, w//4:w//2] 
 
-fig, axes = plt.subplots(1, 5, figsize=(15, 5)) #prikazujemo 5 razlicitih verzija slike
+fig, axes = plt.subplots(1, 5, figsize=(15, 5))
 
 axes[0].imshow(svjetlina)
 axes[0].set_title("Svjetlina")
