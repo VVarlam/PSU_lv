@@ -3,28 +3,23 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from skimage.io import imread, imsave
 
-# Učitavanje slike
 slika = imread("example.png")
 visina, sirina, kanali = slika.shape
 
-# Pretvaranje slike u 2D niz piksela (svaki piksel je RGB trojka)
 pikseli = slika.reshape(-1, 3)
 
-# KMeans za kvantizaciju boja sa 12 klastera
+#kvantizacija boja sa 12 klastera
 broj_klastera = 12
 model = KMeans(n_clusters=broj_klastera, random_state=42)
 model.fit(pikseli)
 
-# Mapiranje piksela na najbliži centroid klastera
 pikseli_kvantizirani = model.cluster_centers_[model.labels_]
 
-# Vraćanje slike u originalni oblik i tip podataka uint8
+#Vraćanje slike u originalni oblik
 slika_kvantizirana = pikseli_kvantizirani.reshape(visina, sirina, kanali).astype(np.uint8)
 
-# Spremanje kvantizirane slike
 imsave("quantized_example.png", slika_kvantizirana)
 
-# Prikaz originalne i kvantizirane slike
 plt.figure(figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
