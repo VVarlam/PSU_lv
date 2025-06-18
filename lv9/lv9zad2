@@ -1,0 +1,87 @@
+import tensorflow as tf
+from tensorflow.keras import layers, models
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping
+from tensorflow.keras.preprocessing import image_dataset_from_directory
+from sklearn.metrics import confusion_matrix
+import numpy as np
+import os
+
+train_dir = 'Train'
+test_dir = 'Test'
+
+train_ds = image_dataset_from_directory(
+    train_dir,
+    labels='inferred',
+    label_mode='categorical',
+    validation_split=0.2,
+    subset='training',
+    seed=42,
+    image_size=(48, 48),
+    batch_size=32
+)
+
+val_ds = image_dataset_from_directory(
+    train_dir,
+    labels='inferred',
+    label_mode='categorical',
+    validation_split=0.2,
+    subset='validation',
+    seed=42,
+    image_size=(48, 48),
+    batch_size=32
+)
+
+test_ds = image_dataset_from_directory(
+    test_dir,
+    labels='inferred',
+    label_mode='categorical',
+    image_size=(48, 48),
+    batch_size=32
+)
+
+AUTOTUNE = tf.data.AUTOTUNE
+train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
+test_ds = test_ds.prefetch(buffer_size=AUTOTUNE)
+
+model = models.Sequential([
+    layers.Rescaling(1./255, input_shape=(48, 48, 3)),
+    layers.Conv2D(32, (5, 5), activation='relu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.Conv2D(64, (5, 5), activation='relu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.Conv2D(128, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(512, activation='relu'),
+    layers.Dropout(0.5),
+    layers.Dense(43, activation='softmax')
+])
+
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+checkpoint_cb = ModelCheckpoint('model_best.h5', save_best_only=True, monitor='val_loss', mode='min', verbose=1)
+tensorboard_cb = TensorBoard(log_dir='logs')
+earlystop_cb = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+
+history = model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=30,
+    callbacks=[checkpoint_cb, tensorboard_cb, earlystop_cb]
+)
+
+test_loss, test_acc = model.evaluate(test_ds)
+print(f'Test Accuracy: {test_acc:.4f}')
+
+y_true = np.concatenate([y for x, y in test_ds], axis=0)
+y_true = np.argmax(y_true, axis=1)
+
+y_pred_probs = model.predict(test_ds)
+y_pred = np.argmax(y_pred_probs, axis=1)
+
+cm = confusion_matrix(y_true, y_pred)
+print("Confusion Matrix:\n", cm)
